@@ -4,8 +4,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const countryGETS = require('./routes/countryGETS');
 const countryPOSTS = require('./routes/countryPOSTS');
-const country = require('./country');
-const token = require('./token');
 
 //express
 const server = express();
@@ -48,34 +46,28 @@ server.use((req, res, next) => {
     });
 });
 
-//deploy
+//db
 mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@programmingprojects.cpk0g.mongodb.net/${process.env.MONGO_DEFAULT_DB}`, {useNewUrlParser: true, useUnifiedTopology: true});
-
 const db = mongoose.connection;
-
 db.on('error', console.error.bind(console, 'connection error:'));
-
 db.once('open', function() {
   console.log('we are connected!');
+
+  //start
   server.listen(process.env.PORT || 8080);
 });
 
-//testing area
-
+/*** testing area ***/
 //mongoose.connection.collection('tokens').updateOne({id: "x"}, {$set: {count: 3}});
-
 /*
 const t = new token({ 
     id: "123xdas213131",
     createdAt: new Date()
 });
-
 //t.save()
 */
-
 //let d = mongoose.connection.collection("tokens")
 //d.createIndex({ "createdAt": 1 }, { expireAfterSeconds: 3600 });
-
 /*
 country.find().then(countries => {
     let totalCountries = countries.length + 1;
@@ -94,7 +86,6 @@ country.find().then(countries => {
     .then(() => console.log('country added to db'));
 })
 */
-
 /*
 const Country = new country({ 
     name: 'Test',
@@ -103,10 +94,8 @@ const Country = new country({
     area: 'Test',
     currency: 'Test' 
 });
-
 Country
 .save()
 .then(() => console.log('country added to db'));
-
 country.find().then(countries => console.log(countries));
 */
