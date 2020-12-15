@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Index</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/events.js"></script>
+</head>
+<body>
+    <div id="Supported_Countries"></div>
+        <h3>Supported Countries</h3>
+        <p>Sweden</p>
+        <p>Denmark</p>
+        <p>Finland</p>
+        <p>Germany</p>
+        <p>Italy</p>
+        <p>France</p>
+        <p>Spain</p>
+        <p>USA</p>
+        <p>Mexico</p>
+        <p>Brazil</p>
+    </div>
+
+    <br />
+
+    <div id="GET_Requests">
+        <h3>Supported Endpoints</h3>
+        <p> <b>GET All Countries </b> <br />/countries</p>
+        <p> <b>GET Specific Country</b> <br /> /country?name=Sweden</p>
+        <p style="margin-bottom: 0px"> <b>GET Multiple Specific Countries</b> <br /> /country?name=Sweden&name=USA&name=Brazil </p>
+    </div>
+
+    <br />
+    
+    <div id="register">
+        <form id="form_Register" action="/token" method="POST" target="_blank">
+            <h3>Token</h3>
+            <button type="submit">Generate Token</button>
+            <br />
+        </form>
+    </div>
+
+    <br />
+       
+    <div id="requestWithToken">
+        <form id="form_RequestWithToken" action="/countries" method="POST" target="_blank">
+            <h3>Request</h3>
+            <label>Endpoint</label>
+            <br />
+            <select id="endpoint" name="endpoint" onchange="changeFormAction(this.value)">
+                <option value="countries">countries</option>
+                <option value="country">country</option>
+            </select>
+            
+            <br />
+            <label>Token</label>
+            <br />
+            <input style="margin-bottom: 5px;" id="token" name="token" placeholder="" value=""></input>
+            
+            
+            
+            <br />
+            
+            <label>Params</label>
+            <br />
+            <input id="params" name="params" placeholder="Sweden, Brazil, USA" value=""></input>
+            
+            <br />
+            
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- 
+    <div id="POST_Requests">
+        <b>POSTS</b>
+        <p>1.</p>
+        <p>2.</p>
+        <p>3.</p>
+    </div>
+    -->
+
+</body>
+</html>
