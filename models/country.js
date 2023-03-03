@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+//imports
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const countrySchema = new Schema({
     id: Number,
@@ -11,6 +12,6 @@ const countrySchema = new Schema({
 },
 {
     versionKey: false
-});
+})
 
-module.exports = mongoose.model('Country', countrySchema);
+module.exports = mongoose.model('Country', countrySchema)

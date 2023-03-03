@@ -4,12 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/events.js"></script>
 </head>
+
+<script>
+    function changeFormAction(value)
+    {
+        console.log(value)
+        document.getElementById("form_RequestWithToken").action = "/" + value
+    }
+</script>
+
 <body>
-    <div id="Supported_Countries"></div>
-        <h3>Supported Countries</h3>
+    <h1 id="title">Node REST API</h1>
+    <h3 id="supportedCountriesTitle">Countries Supported</h3>
+    <div id="supportedCountries">
         <p>Sweden</p>
         <p>Denmark</p>
         <p>Finland</p>
@@ -22,64 +30,74 @@
         <p>Brazil</p>
     </div>
 
-    <br />
-
-    <div id="GET_Requests">
-        <h3>Supported Endpoints</h3>
-        <p> <b>GET All Countries </b> <br />/countries</p>
-        <p> <b>GET Specific Country</b> <br /> /country?name=Sweden</p>
-        <p style="margin-bottom: 0px"> <b>GET Multiple Specific Countries</b> <br /> /country?name=Sweden&name=USA&name=Brazil </p>
+    <h3 id="supportedEndpointsTitle">Routes Supported</h3>
+    <div id="supportedEndpoints">
+        <p>/countries</p>
+        <p>/country?name=Sweden</p>
+        <p>/country?name=Sweden&name=USA&name=Brazil</p>
     </div>
 
-    <br />
-    
-    <div id="register">
-        <form id="form_Register" action="/token" method="POST" target="_blank">
-            <h3>Token</h3>
+    <div id="generateToken">
+        <form id="formRegister" action="/token" method="POST" target="">
+            <!-- <h3>Token</h3> -->
             <button type="submit">Generate Token</button>
-            <br />
         </form>
     </div>
 
-    <br />
-       
-    <div id="requestWithToken">
-        <form id="form_RequestWithToken" action="/countries" method="POST" target="_blank">
+    <% if(token != null) { %>
+    <div id="exampleRequest">
+        <form id="formExampleRequest" action="/countries" method="POST" target="">
             <h3>Request</h3>
-            <label>Endpoint</label>
-            <br />
+
+            <!-- <label>Token (Token is valid for 1h)</label> -->
+            <input id="token" name="token" placeholder="token" value="<%=token %>"></input>
+            <!-- <input id="" name="" placeholder="countries, country" value=""></input> -->
+
+            <!-- <label>Type</label> -->
             <select id="endpoint" name="endpoint" onchange="changeFormAction(this.value)">
                 <option value="countries">countries</option>
                 <option value="country">country</option>
             </select>
             
-            <br />
-            <label>Token</label>
-            <br />
-            <input style="margin-bottom: 5px;" id="token" name="token" placeholder="" value=""></input>
+            <!-- <label>Params</label> -->
+            <input id="params" name="params" placeholder="sweden, brazil, usa" value=""></input>
             
-            
-            
-            <br />
-            
-            <label>Params</label>
-            <br />
-            <input id="params" name="params" placeholder="Sweden, Brazil, USA" value=""></input>
-            
-            <br />
-            
-            <button type="submit">Submit</button>
+            <button id="submit" type="submit">Submit</button>
         </form>
     </div>
-
-    <!-- 
-    <div id="POST_Requests">
-        <b>POSTS</b>
-        <p>1.</p>
-        <p>2.</p>
-        <p>3.</p>
-    </div>
-    -->
-
+    <% } else { %>
+    <% } %>
 </body>
 </html>
+
+<style>
+    /*** elements ***/
+    html { background-color: rgb(21, 53, 21); }
+    body
+    {
+        width: 30vw;
+        margin: auto;
+        margin-top: 10vh;
+        padding: 40px;
+        font-family: Calibri, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        border: 1px solid black;
+        box-shadow: 2px 1px black;
+        background-color: white;
+    }
+    input { display: block; width: 90%; padding: 10px; font-size: 16px; }
+    button { width: 100%; padding: 10px; font-weight: bold; border-radius: 0%; color: white; border: 1px solid black; background-color: black; }
+    select { width: 100%; font-size: 24px; }
+    h3 { margin: 0px; padding: 0px; }
+    p { margin: 0px; font-size: 18px; }
+    form { width: 100%; }
+    select { width: 100%; }
+    label { display: block; margin: 10px 0px 0px 0px; }
+    a { display: block; }
+
+    #supportedEndpointsTitle { margin: 20px 0px 0px 0px; user-select: none; font-size: 20px; }
+    #supportedCountriesTitle { margin: 0px; user-select: none; font-size: 20px; }
+    #generateToken { margin: 30px 0px 0px 0px; }
+    #exampleRequest { margin: 30px 0px 0px 0px; }
+    #title { margin: 0px 0px 20px 0px; text-align: center; user-select: none; }
+    #submit { margin: 30px 0px 0px 0px; }
+</style>
