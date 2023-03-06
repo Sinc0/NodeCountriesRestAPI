@@ -22,7 +22,7 @@ module.exports = async(req, res, next) => {
     else
     {
         console.log("(Unknown User) " + req.ip + " requests " + "/country")
-        res.json({ error: 'token not provided or token is invalid' })
+        res.json({ error: 'token is invalid' })
     }
 }
 

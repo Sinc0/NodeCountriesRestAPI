@@ -27,7 +27,7 @@ exports.getAll = async(req, res, next) => {
     }
     
     res.status(201).json({
-        message: 'List of all stored countries',
+        type: 'all',
         post: { countries: countriesArray }
     })
 }
@@ -68,14 +68,14 @@ exports.getSpecific = async(req, res, next) => {
         {
             res
                 .status(404)
-                .json({ message: '404 Country not found' })
+                .json({ error: '404 country not found' })
         }
         else
         {
             res
                 .status(201)
                 .json({
-                        message: 'Specific Country',
+                        type: 'specific',
                         post: 
                         { 
                             country: 
@@ -101,7 +101,7 @@ exports.getSpecific = async(req, res, next) => {
 
                 if(cntry.length == 0)
                 {
-                    res.status(404).json({ message: '404 Countries not found' });
+                    res.status(404).json({ error: '404 countries not found' });
                 }
                 
                 countriesArray
@@ -116,12 +116,12 @@ exports.getSpecific = async(req, res, next) => {
 
         if(countriesArray == 0)
         {
-            res.status(404).json({ message: '404 Countries not found' });
+            res.status(404).json({ error: '404 countries not found' });
         }
         else
         {
             res.status(201).json({
-                message: 'Specific Countries',
+                type: 'specific',
                 post: { countries: countriesArray }
             })
         }
@@ -134,7 +134,7 @@ exports.createPost = (req, res, next) => {
 
     //should create post in db
     res.status(201).json({
-        message: 'Post created successfully',
+        message: 'post created successfully',
         post: { id: Math.random(), title: title, content: content }
     })
 }

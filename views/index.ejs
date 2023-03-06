@@ -10,7 +10,7 @@
     function changeFormAction(value)
     {
         console.log(value)
-        document.getElementById("form_RequestWithToken").action = "/" + value
+        document.getElementById("formExampleRequest").action = "/" + value
     }
 </script>
 
@@ -34,7 +34,7 @@
     <div id="supportedEndpoints">
         <p>/countries</p>
         <p>/country?name=Sweden</p>
-        <p>/country?name=Sweden&name=USA&name=Brazil</p>
+        <p>/country?name=Sweden&name=USA</p>
     </div>
 
     <div id="generateToken">
@@ -72,20 +72,30 @@
 
 <style>
     /*** elements ***/
-    html { background-color: rgb(21, 53, 21); }
     body
     {
         width: 30vw;
         margin: auto;
         margin-top: 10vh;
-        padding: 40px;
-        font-family: Calibri, Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-        border: 1px solid black;
+        padding: 30px;
+        font-family: Arial, Helvetica, sans-serif;
+        border: 1px solid white;
         box-shadow: 2px 1px black;
-        background-color: white;
+        color: white;
+        background-color: black;
     }
-    input { display: block; width: 90%; padding: 10px; font-size: 16px; }
-    button { width: 100%; padding: 10px; font-weight: bold; border-radius: 0%; color: white; border: 1px solid black; background-color: black; }
+    input { display: block; width: 94%; padding: 10px; font-size: 16px; }
+    button 
+    { 
+        width: 100%; 
+        padding: 10px; 
+        font-weight: bold; 
+        border-radius: 0%; 
+        color: white; 
+        border: 1px solid black; 
+        color: black;
+        background-color: white; 
+    }
     select { width: 100%; font-size: 24px; }
     h3 { margin: 0px; padding: 0px; }
     p { margin: 0px; font-size: 18px; }
@@ -99,5 +109,11 @@
     #generateToken { margin: 30px 0px 0px 0px; }
     #exampleRequest { margin: 30px 0px 0px 0px; }
     #title { margin: 0px 0px 20px 0px; text-align: center; user-select: none; }
-    #submit { margin: 30px 0px 0px 0px; }
+    #submit { margin: 0px; }
+
+    /*** mobile ***/
+    @media screen and (max-width: 1000px) {
+        body { width: auto; margin: 0px; box-shadow: 0px 0px black; border: 0px solid black; }
+        input { width: 92%; }
+    }
 </style>
