@@ -19,5 +19,5 @@ exports.create = async(req, res, next) => {
     newToken.save()
 
     //send response
-    res.render('index', { token: uuid })
+    res.status(201).json({ token: uuid }) 
 }

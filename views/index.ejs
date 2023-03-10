@@ -48,24 +48,93 @@
             sectionAbout.style.display = "block"
         } 
     }
+
+    function submitGenerateTokenForm(event) 
+    {
+        //elements
+        let buttonGenerateToken = document.getElementById("buttonGenerateToken")
+        let token1 = document.getElementById("token1")
+        let exampleRequest = document.getElementById("exampleRequest")
+        let tryRequestAll = document.getElementById("tryRequestAll")
+        let tryRequestSpecific = document.getElementById("tryRequestSpecific")
+        let tryRequestMultiple = document.getElementById("tryRequestMultiple")
+
+        //variables
+        let url = "/token"
+        let request = new XMLHttpRequest()
+
+        //post form
+        request.open('POST', url, true)
+        request.onload = function() { 
+            //set data
+            let data = JSON.parse(request.responseText)
+
+            //set token
+            let token = data.token
+
+            //update elements
+            token1.value = token
+            exampleRequest.style.display = "block"
+            tryRequestAll.href = "/all?token=" + token
+            tryRequestSpecific.href = "/specific?token=" + token + "&name=usa"
+            tryRequestMultiple.href = "/multiple?token=" + token + "&name=usa&name=spain"
+            token1.style.display = "block"
+
+            //set local storage
+            localStorage.setItem("token", token)
+        }
+        request.onerror = function() { console.log("error: create token failed") }
+        request.send(new FormData(event.target))
+
+        //prevent from default submit
+        event.preventDefault()
+    }
+
+    function attachFormSubmitEvent()
+    {
+        //elements
+        let formGenerateToken = document.getElementById('formGenerateToken')
+        
+        //set event listener
+        formGenerateToken.addEventListener("submit", submitGenerateTokenForm)
+    }
+
+    function refreshTokenLinks()
+    {
+        //elements
+        let tryRequestAll = document.getElementById("tryRequestAll")
+        let tryRequestSpecific = document.getElementById("tryRequestSpecific")
+        let tryRequestMultiple = document.getElementById("tryRequestMultiple")
+        let token1 = document.getElementById("token1")
+        let exampleRequest = document.getElementById("exampleRequest")
+
+        //variables
+        let token = localStorage.getItem('token')
+
+        //error check
+        if(token)
+        {
+            //update elements
+            tryRequestAll.href = "/all?token=" + token
+            tryRequestSpecific.href = "/specific?token=" + token + "&name=usa"
+            tryRequestMultiple.href = "/multiple?token=" + token + "&name=usa&name=spain"
+            token1.style.display = "block"
+            token1.value = token
+            exampleRequest.style.display = "block"
+        }
+    }
 </script>
 
-<body>
+<body onload="attachFormSubmitEvent(), refreshTokenLinks()">
+    <!-- nav menu -->
     <div id="navMenu">
         <p id="navMenuHome" onclick="selectSection('home')">Home</p>
         <span class="dot">·</span>
         <p id="navMenuAbout" onclick="selectSection('about')">About</p>
     </div>
 
+    <!-- section home -->
     <div id="sectionHome">
-        <!-- routes supported -->
-        <h3 id="supportedEndpointsTitle">Routes Supported</h3>
-        <div id="supportedEndpoints">
-            <input value="/all?token={token}"></input>
-            <input value="/specific?token={token}&name=USA"></input>
-            <input value="/multiple?token={token}&name=USA&name=Spain"></input>
-        </div>
-    
         <!-- supported countries -->
         <h3 id="supportedCountriesTitle">Countries Supported</h3>
         <div id="supportedCountries">
@@ -80,40 +149,43 @@
             <p>Mexico</p>
             <p>Brazil</p>
         </div>
+        
+        <!-- routes supported -->
+        <h3 id="supportedRoutesTitle">Routes Supported</h3>
+        <div id="supportedEndpoints">
+            <input value="/all?token={token}"></input>
+            <input value="/specific?token={token}&name=USA"></input>
+            <input value="/multiple?token={token}&name=USA&name=Spain"></input>
+        </div>
+    
     
         <!-- generate token -->
         <div id="generateToken">
             <form id="formGenerateToken" action="/token" method="POST" target="">
                 <h3 id="generateTokenTitle">Token</h3>
-                <% if(token == null) { %>
-                    <button type="submit">Generate</button>
-                <% } %>
+                <button id="buttonGenerateToken" type="submit">Generate</button>
             </form>
     
-            <% if(token != null) { %>
-                <input id="token1" name="token" placeholder="token" value="<%=token %>"></input>
-            <% } %>
+            <input id="token1" name="token" placeholder="..." value="<%=token %>"></input>
         </div>
     
         <!-- try request -->
-        <% if(token != null) { %>
-            <div id="exampleRequest">
-                <form id="formExampleRequest" action="/countries" method="POST" target="">
-                    <h3 id="tryRequestTitle">Try Request</h3>
-                    
-                    <!-- token -->
-                    <input hidden id="token2" name="token" placeholder="token" value="<%=token %>"></input>
-                    
-                    <!-- links -->
-                    <a href="/all?token=<%=token %>" class="tryRequestLink">All</a>
-                    <a href="/specific?token=<%=token %>&name=usa" class="tryRequestLink">Specific: USA</a>
-                    <a href="/multiple?token=<%=token %>&name=usa&name=spain" class="tryRequestLink">Multiple: USA, Spain</a>
-                </form>
-            </div>
-        <% } else { %>
-        <% } %>
+        <div id="exampleRequest">
+            <form id="formExampleRequest" action="/countries" method="POST" target="">
+                <h3 id="tryRequestTitle">Try Request</h3>
+                
+                <!-- token -->
+                <input hidden id="token2" name="token" value="<%=token %>"></input>
+                
+                <!-- links -->
+                <a href="/all?token=<%=token %>" id="tryRequestAll" class="tryRequestLink">All</a>
+                <a href="/specific?token=<%=token %>&name=usa" id="tryRequestSpecific" class="tryRequestLink">Specific: USA</a>
+                <a href="/multiple?token=<%=token %>&name=usa&name=spain" id="tryRequestMultiple" class="tryRequestLink">Multiple: USA, Spain</a>
+            </form>
+        </div>
     </div>
     
+    <!-- section about -->
     <div id="sectionAbout">
         <h3 id="Title">About</h3>
         <p>This is a student project, made to learn about REST APIs.</p>
@@ -129,7 +201,7 @@
         <p class="privacyPolicyItem">Collects Messages Data: <span class="no">No</span></p>
         <p class="privacyPolicyItem">Collects Media Data: <span class="no">No</span></p>
         <p class="privacyPolicyItem">Uses Cookies: <span class="no">No</span></p>
-        <p class="privacyPolicyItem">Uses Local Storage: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Uses Local Storage: <span class="yes">Yes</span></p>
         <p class="privacyPolicyItem">Links to Other Websites: <span class="no">No</span></p>
         <p class="privacyPolicyItem">Policy Might Change in the Future: <span class="yes">Yes</span></p>
     </div>
@@ -140,12 +212,11 @@
     /*** elements ***/
     body
     {
-        width: 30vw;
+        width: 400px;
         margin: auto;
-        margin-top: 10vh;
         padding: 30px;
         font-family: Arial, Helvetica, sans-serif;
-        border: 1px solid white;
+        /* border: 1px solid white; */
         box-shadow: 2px 1px black;
         overflow-y: scroll;
         color: white;
@@ -153,26 +224,13 @@
     }
     input 
     { 
-        display: block; width: calc(96% + 1px); 
+        display: block; 
+        width: 400px; 
         margin: 0px 0px 1px 0px; 
-        padding: 11px; 
+        padding: 11px 0px 11px 11px; 
         font-size: 16px; 
         font-weight: bold; 
-        border: 1px solid white; 
-    }
-    button 
-    { 
-        height: 42px;
-        width: 100%; 
-        padding: 10px; 
-        font-weight: bold;
-        font-size: 16px;
-        border-radius: 0%; 
-        color: white; 
         border: 1px solid white;
-        border-bottom: 1px solid black; 
-        color: black;
-        background-color: white; 
     }
     select { height: 42px; width: 100%; font-size: 24px; }
     h3 { margin: 0px; padding: 0px; }
@@ -183,12 +241,13 @@
     a { margin: 0px; padding: 0px; text-decoration: none; color: white; }
     
     /*** classes ***/
-    .dot { display: block; padding: 3px 6px 0px 6px; opacity: 0.3; }
+    .dot { display: block; padding: 2px 7px 0px 7px; opacity: 0.3; }
     .tryRequestLink 
     {
-        display: block; 
+        display: block;
+        width: 402px; 
         margin: 0px 0px 1px 0px;
-        padding: 12px 11px 12px 11px; 
+        padding: 12px 0px 12px 11px; 
         font-size: 16px;
         font-weight: bold;
         text-decoration: none;
@@ -199,8 +258,8 @@
     .no { color: red; }
     
     /*** ids ***/
-    #supportedEndpointsTitle { margin: 0px 0px 0px 0px; user-select: none; font-size: 20px; }
-    #supportedCountriesTitle { margin: 30px 0px 0px 0px; user-select: none; font-size: 20px; }
+    #supportedRoutesTitle { margin: 30px 0px 0px 0px; user-select: none; font-size: 20px; }
+    #supportedCountriesTitle { margin: 0px; user-select: none; font-size: 20px; }
     #tryRequestTitle { margin: 30px 0px 0px 0px; font-size: 20px; }
     #generateTokenTitle { margin: 30px 0px 0px 0px; user-select: none; font-size: 20px; }
     #title { margin: 0px 0px 20px 0px; text-align: center; user-select: none; }
@@ -234,10 +293,31 @@
         background-color: black; 
     }
     #sectionHome { display: block; }
+    #buttonGenerateToken
+    {
+        height: 42px;
+        width: 413px;
+        margin: 0px 0px 1px 0px;
+        padding: 11px 0px 11px 11px; 
+        font-weight: bold;
+        font-size: 16px;
+        border-radius: 0%; 
+        text-align: center;
+        color: white; 
+        border: 1px solid white;
+        color: black;
+        background-color: white; 
+    }
+    #token1 { display: none; }
+    #exampleRequest { display: none; }
     
     /*** mobile ***/
     @media screen and (max-width: 1000px) {
         body { width: auto; margin: 0px; box-shadow: 0px 0px black; border: 0px solid black; }
-        input { width: calc(93% + 3px); }
+        input { width: 80vw; }
+
+        .tryRequestLink { width: 80vw; }
+
+        #buttonGenerateToken { width: calc(84vw - 2px); }
     }
 </style>
