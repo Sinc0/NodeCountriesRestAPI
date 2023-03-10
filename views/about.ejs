@@ -29,13 +29,21 @@
 
 
 <style>
-    body { width: 30vw; margin: auto; background-color: black; }
+    /*** elements ***/
+    body { width: 30vw; margin: auto; margin-top: 10vh; padding: 30px; border: 1px solid white; background-color: black; }
     h3 { margin: 0px; padding: 0px; color: white; font-family: Arial, Helvetica, sans-serif; }
     p { margin: 0px; padding: 0px; color: white; font-family: Arial, Helvetica, sans-serif; font-size: 18px; }
 
+    /*** ids ***/
     #privacyPolicyTitle { margin: 30px 0px 0px 0px; font-size: 20px; }
-    #Title { margin: 30px 0px 0px 0px; font-size: 20px; }
+    #Title { margin: 0px; font-size: 20px; }
 
+    /*** classes ***/
     .yes { color: lightgreen; }
     .no { color: red; }
+
+    /*** mobile ***/
+    @media screen and (max-width: 1000px) {
+        body { width: auto; margin: 0px; box-shadow: 0px 0px black; border: 0px solid black; }
+    }
 </style>

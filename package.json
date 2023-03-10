@@ -1,10 +1,9 @@
 {
-  "name": "first_rest_api",
+  "name": "node-countries-rest-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a student project, made to learn about rest APIs.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
   "author": "",
