@@ -158,6 +158,7 @@ exports.multiple = async(req, res, next) => {
         }
         else
         {
+            //send response
             res.status(201).json({type: 'multiple', countries: countriesArray })
 
             //increment endpoint usage counter
