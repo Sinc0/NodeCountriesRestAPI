@@ -1,140 +1,172 @@
 //imports
-const country = require('../models/country')
+const country = require('../models/countrySchema.js')
 const mongoose = require('mongoose')
-const token = require('../models/token')
-const dbCollectionTokens = mongoose.connection.collection('tokens')
 
-exports.getAll = async(req, res, next) => {
+//variables
+const dbTokens = mongoose.connection.collection('tokens')
+
+//exports
+exports.all = async(req, res, next) => {
     //log
-    console.log(req.ip + " requests " + "/countries")
+    console.log(req.ip + " requests " + "/all")
+    
+    //debugging
+    console.log(req.query)
     
     //variables
-    let tkn = req.headers.token
-    let countriesArray = []
+    let tkn = req.query.token
     
-    const updateDb = await dbCollectionTokens.updateOne({id: tkn}, {$inc: {"/countries": 1}})
-    const countries = await country.find()
+    //get all countries data
+    let data = await country.find()
     
-    for(let c = 0; c < countries.length; c++)
+    if(data.length == 0) //error check
     {
-        countriesArray.push({
-            id: countries[c].id,
-            name: countries[c].name,
-            population: countries[c].population,
-            capital: countries[c].capital,
-            currency: countries[c].currency
-        })
+        //send response
+        res.status(404).json({ error: '404 countries not found' }) 
     }
-    
-    res.status(201).json({
-        type: 'all',
-        post: { countries: countriesArray }
-    })
-}
-
-exports.getSpecific = async(req, res, next) => {
-    //log
-    console.log(req.ip + " requests " + "/country")
-    
-    let queryParams = Object.values(req.query)
-    if(queryParams.length == 0) { queryParams = req.body.params.replace(/\s/g, "") }
-    let paramsToString = queryParams.toString()
-    let paramsToLowerCase = paramsToString.toLowerCase()
-    let paramsDirtyArray = paramsToLowerCase.split(',')
-    let paramsCleanArray = []
-    let numberOfParams = paramsDirtyArray.length
-    let tkn = req.headers.token
-    let cntry
-    
-    for(let c = 0; c < numberOfParams; c++)
+    else 
     {
-        let paramsToUpperCaseFirstLetter = paramsDirtyArray[c].charAt(0).toUpperCase() + paramsDirtyArray[c].substring(1);
-        
-        if(paramsToUpperCaseFirstLetter == "Usa")
+        //clean country obj
+        for(let c in data)
         {
-            paramsToUpperCaseFirstLetter = "USA"
+            data[c] = {
+                id: data[c].id,
+                name: data[c].name,
+                population: data[c].population,
+                captial: data[c].captial,
+                area: data[c].area,
+                currency: data[c].currency
+            }
         }
         
-        paramsCleanArray.push(paramsToUpperCaseFirstLetter)
-    }
-
-    const updateDb = await dbCollectionTokens.updateOne({id: tkn}, {$inc: {"/country": 1}})
-
-    if(numberOfParams == 1)
-    {
-        cntry = await country.find({name: paramsCleanArray.toString()})
+        //send response
+        res.status(201).json({
+            type: 'all',
+            countries: data
+        })
     
-        if(cntry.length == 0)
-        {
-            res
-                .status(404)
-                .json({ error: '404 country not found' })
+        //increment endpoint usage counter
+        await dbTokens.updateOne({id: tkn}, {$inc: {"/all": 1}})
+    }
+}
+
+exports.specific = async(req, res, next) => {
+    //log
+    console.log(req.ip + " requests " + "/specific")
+
+    //debugging
+    console.log(req.query)
+    
+    //variables
+    let countryIsArray = Array.isArray(req.query.name)
+    let specificCountry = req.query.name
+    let tkn = req.query.token
+    
+    if(specificCountry == null)
+    {
+        //send response
+        res.status(404).json({ error: 'country not specified' }) 
+    }
+    else if(countryIsArray == false)
+    {
+        //lowercase handling
+        specificCountry = specificCountry.toLowerCase()
+
+        //uppercase handling
+        if (specificCountry == "usa") { specificCountry = "USA" }
+        else { specificCountry = specificCountry[0].toUpperCase() + specificCountry.substring(1)}
+
+        //get country data
+        let data = await country.find({name: specificCountry})
+    
+        if(data.length == 0) //error check
+        { 
+            //send response
+            res.status(404).json({ error: '404 country not found' }) 
         }
         else
         {
-            res
-                .status(201)
-                .json({
-                        type: 'specific',
-                        post: 
-                        { 
-                            country: 
-                            {
-                                id: cntry[0].id,
-                                name: cntry[0].name,
-                                population: cntry[0].population,
-                                capital: cntry[0].capital,
-                                currency: cntry[0].currency
-                            }
-                        }
-                })
+            //send response
+            res.status(201).json({ 
+                type: 'specific', 
+                country: { 
+                    id: data[0].id, 
+                    name: data[0].name, 
+                    population: data[0].population, 
+                    capital: data[0].capital, 
+                    currency: data[0].currency 
+                }
+            })
+
+            //increment endpoint usage counter
+            await dbTokens.updateOne({id: tkn}, {$inc: {"/specific": 1}})
         }
-        
     }
     else
     {
-        let countriesArray = []
-        
-        for(let c = 0; c < numberOfParams; c++)
-        {
-            cntry = await country.find({name: paramsCleanArray[c]})
-
-                if(cntry.length == 0)
-                {
-                    res.status(404).json({ error: '404 countries not found' });
-                }
-                
-                countriesArray
-                            .push({
-                                id: cntry[0].id,
-                                name: cntry[0].name,
-                                population: cntry[0].population,
-                                capital: cntry[0].capital,
-                                currency: cntry[0].currency
-                            })
-        }
-
-        if(countriesArray == 0)
-        {
-            res.status(404).json({ error: '404 countries not found' });
-        }
-        else
-        {
-            res.status(201).json({
-                type: 'specific',
-                post: { countries: countriesArray }
-            })
-        }
+        //send response
+        res.status(404).json({ error: 'this endpoint does not support multiple countries' })
     }
 }
 
-exports.createPost = (req, res, next) => {
-    const title = req.body.title
-    const content = req.body.content
+exports.multiple = async(req, res, next) => {
+    //log
+    console.log(req.ip + " requests " + "/multiple")
 
-    //should create post in db
-    res.status(201).json({
-        message: 'post created successfully',
-        post: { id: Math.random(), title: title, content: content }
-    })
+    //debugging
+    console.log(req.query)
+    
+    //variables
+    let countryIsArray = Array.isArray(req.query.name)
+    let countriesArray = []
+    let countries = req.query.name
+    let tkn = req.query.token
+
+    if(countryIsArray == true)
+    {
+        for(let c in countries)
+        {
+            //uppercase handling
+            if(countries[c] == "") { countries[c] = null }
+            else if (countries[c] == "usa") { countries[c] = "USA" }
+            else { countries[c] = countries[c][0].toUpperCase() + countries[c].substring(1)}
+
+            //get country data
+            let data = await country.find({name: countries[c]})
+            
+            //error check
+            if(data.length != 0)
+            {
+                //set countries obj
+                countries[c] = { 
+                    id: data[0].id, 
+                    name: data[0].name, 
+                    population: data[0].population, 
+                    capital: data[0].capital, 
+                    currency: data[0].currency 
+                }
+
+                //add country to array
+                countriesArray.push(countries[c])
+            }
+        }
+
+        if(countriesArray.length == 0) //error check
+        { 
+            //send response
+            res.status(404).json({ error: '404 countries not found' }) 
+        }
+        else
+        {
+            res.status(201).json({type: 'multiple', countries: countriesArray })
+
+            //increment endpoint usage counter
+            await dbTokens.updateOne({id: tkn}, {$inc: {"/multiple": 1}})
+        }
+    }
+    else
+    {
+        //send response
+        res.status(404).json({ error: 'this endpoint does not support a single country' })
+    }
 }

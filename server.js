@@ -2,43 +2,33 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const mongoose = require('mongoose')
+const db = require('mongoose')
 const routes = require('./routes')
 
-//server
+//variables
 const server = express()
 
-//set
-server.set('view engine', 'ejs')
-server.set('views', 'views')
-
-//use
-server.use(express.static(path.join(__dirname, 'public')))
-server.use(bodyParser.json())
-server.use(bodyParser.raw())
-server.use(bodyParser.text())
-server.use(bodyParser.urlencoded({ extended: true }))
-server.use((req, res, next) => {
+//settings
+server.set('view engine', 'ejs') //set view engine
+server.set('views', 'views') //set views folder
+server.use(express.static(path.join(__dirname, 'public'))) //set public folder
+server.use(bodyParser.json()) //set parser
+server.use(bodyParser.raw()) //set parser
+server.use(bodyParser.text()) //set parser
+server.use(bodyParser.urlencoded({ extended: true })) //set parser
+server.use((req, res, next) => { //set cors handling
     res.setHeader('Access-Control-Allow-Origin', '*')
-    res.setHeader('Acess-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
     next()
 })
-
-//routes
-server.use(routes)
+server.use(routes) //set routes
+server.use((req, res, next) => { res.status(404).json({ error: 'endpoint does not exist' }) }) //set route does not exists handling
 
 //connect to db
-mongoose.connect(`mongodb+srv://:@programmingprojects.cpk0g.mongodb.net/`,  {
-    useNewUrlParser: true, useUnifiedTopology: true
-})
+db.connect(`mongodb+srv://:@programmingprojects.cpk0g.mongodb.net/`, { useNewUrlParser: true, useUnifiedTopology: true })
+db.connection.on('error', console.error.bind(console, 'connection error:'))
+db.connection.once('open', function() { console.log('db connected!') })
 
-const db = mongoose.connection
-
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', function() {
-  console.log('db connected!')
-
-  //start
-  server.listen(process.env.PORT || 8080)
-})
+//start server
+server.listen(process.env.PORT || 8080)

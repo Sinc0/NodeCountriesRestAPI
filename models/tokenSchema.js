@@ -2,14 +2,8 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const tokenSchema = new Schema({
-    ip: String,
-    id: String,
-    createdAt: Date
-},
-{
-    versionKey: false
-})
+//set schema
+const tokenSchema = new Schema({ ip: String, id: String, createdAt: Date },{ versionKey: false })
 
-//export
+//exports
 module.exports = mongoose.model('Token', tokenSchema)
