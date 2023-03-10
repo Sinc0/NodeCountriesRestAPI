@@ -26,7 +26,7 @@ server.use(routes) //set routes
 server.use((req, res, next) => { res.status(404).json({ error: 'endpoint does not exist' }) }) //set route does not exists handling
 
 //connect to db
-db.connect(`mongodb+srv://:@programmingprojects.cpk0g.mongodb.net/`, { useNewUrlParser: true, useUnifiedTopology: true })
+db.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@programmingprojects.cpk0g.mongodb.net/${process.env.MONGO_DEFAULT_DB}`, { useNewUrlParser: true, useUnifiedTopology: true })
 db.connection.on('error', console.error.bind(console, 'connection error:'))
 db.connection.once('open', function() { console.log('db connected!') })
 
