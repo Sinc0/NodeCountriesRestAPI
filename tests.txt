@@ -1,0 +1,6 @@
+fetch data /all?token={token}
+fetch data /specific?token={token}&name=usa
+fetch data /multiple?token={token}&name=usa&name=spain
+create token
+mobile styling
+about page
