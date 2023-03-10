@@ -19,78 +19,120 @@
     {
         document.getElementById("formGenerateToken").submit()
     }
+
+    function selectSection(selectedSection)
+    {
+        //elements
+        let sectionHome = document.getElementById("sectionHome")
+        let sectionAbout = document.getElementById("sectionAbout")
+        let navMenuHome = document.getElementById("navMenuHome")
+        let navMenuAbout = document.getElementById("navMenuAbout")
+
+        //reset elements
+        sectionHome.style.display = "none"
+        sectionAbout.style.display = "none"
+        navMenuHome.style.opacity = "0.3"
+        navMenuAbout.style.opacity = "0.3"
+        
+        //update elements
+        if(selectedSection == "home") 
+        { 
+            navMenuHome.style.opacity = "1"
+            sectionHome.style.display = "block"
+            sectionAbout.style.display = "none"
+        } 
+        else if(selectedSection == "about") 
+        { 
+            navMenuAbout.style.opacity = "1"
+            sectionHome.style.display = "none"
+            sectionAbout.style.display = "block"
+        } 
+    }
 </script>
 
 <body>
-    <!-- <h1 id="title">Countries REST API</h1> -->
-
-    <!-- routes supported -->
-    <h3 id="supportedEndpointsTitle">Routes Supported</h3>
-    <div id="supportedEndpoints">
-        <p>/all?token={token}</p>
-        <p>/specific?token={token}&name=USA</p>
-        <p>/multiple?token={token}&name=USA&name=Spain</p>
+    <div id="navMenu">
+        <p id="navMenuHome" onclick="selectSection('home')">Home</p>
+        <span class="dot">·</span>
+        <p id="navMenuAbout" onclick="selectSection('about')">About</p>
     </div>
 
-    <!-- supported countries -->
-    <h3 id="supportedCountriesTitle">Countries Supported</h3>
-    <div id="supportedCountries">
-        <p>Sweden</p>
-        <p>Denmark</p>
-        <p>Finland</p>
-        <p>Germany</p>
-        <p>Italy</p>
-        <p>France</p>
-        <p>Spain</p>
-        <p>USA</p>
-        <p>Mexico</p>
-        <p>Brazil</p>
-    </div>
-
-    <!-- generate token -->
-    <div id="generateToken">
-        <form id="formGenerateToken" action="/token" method="POST" target="">
-            <h3 id="generateTokenTitle">Token</h3>
-            <% if(token == null) { %>
-                <button type="submit">Generate</button>
+    <div id="sectionHome">
+        <!-- routes supported -->
+        <h3 id="supportedEndpointsTitle">Routes Supported</h3>
+        <div id="supportedEndpoints">
+            <input value="/all?token={token}"></input>
+            <input value="/specific?token={token}&name=USA"></input>
+            <input value="/multiple?token={token}&name=USA&name=Spain"></input>
+        </div>
+    
+        <!-- supported countries -->
+        <h3 id="supportedCountriesTitle">Countries Supported</h3>
+        <div id="supportedCountries">
+            <p>Sweden</p>
+            <p>Denmark</p>
+            <p>Finland</p>
+            <p>Germany</p>
+            <p>Italy</p>
+            <p>France</p>
+            <p>Spain</p>
+            <p>USA</p>
+            <p>Mexico</p>
+            <p>Brazil</p>
+        </div>
+    
+        <!-- generate token -->
+        <div id="generateToken">
+            <form id="formGenerateToken" action="/token" method="POST" target="">
+                <h3 id="generateTokenTitle">Token</h3>
+                <% if(token == null) { %>
+                    <button type="submit">Generate</button>
+                <% } %>
+            </form>
+    
+            <% if(token != null) { %>
+                <input id="token1" name="token" placeholder="token" value="<%=token %>"></input>
             <% } %>
-        </form>
-
+        </div>
+    
+        <!-- try request -->
         <% if(token != null) { %>
-            <input id="token1" name="token" placeholder="token" value="<%=token %>"></input>
+            <div id="exampleRequest">
+                <form id="formExampleRequest" action="/countries" method="POST" target="">
+                    <h3 id="tryRequestTitle">Try Request</h3>
+                    
+                    <!-- token -->
+                    <input hidden id="token2" name="token" placeholder="token" value="<%=token %>"></input>
+                    
+                    <!-- links -->
+                    <a href="/all?token=<%=token %>" class="tryRequestLink">All</a>
+                    <a href="/specific?token=<%=token %>&name=usa" class="tryRequestLink">Specific: USA</a>
+                    <a href="/multiple?token=<%=token %>&name=usa&name=spain" class="tryRequestLink">Multiple: USA, Spain</a>
+                </form>
+            </div>
+        <% } else { %>
         <% } %>
     </div>
-
-    <!-- try request -->
-    <% if(token != null) { %>
-        <div id="exampleRequest">
-            <form id="formExampleRequest" action="/countries" method="POST" target="">
-                <h3 id="tryRequestTitle">Try Request</h3>
-
-                <!-- <label>Token (Token is valid for 1h)</label> -->
-                <input hidden id="token2" name="token" placeholder="token" value="<%=token %>"></input>
-                <!-- <input id="" name="" placeholder="countries, country" value=""></input> -->
-
-                <!-- <label>Type</label> -->
-                <!-- <select id="endpoint" name="endpoint" onchange="changeFormAction(this.value)">
-                    <option value="countries">countries</option>
-                    <option value="country">country</option>
-                </select> -->
-                
-                <!-- links -->
-                <a href="/all?token=<%=token %>">All</a>
-                <a href="/specific?token=<%=token %>&name=usa">Specific: USA</a>
-                <a href="/multiple?token=<%=token %>&name=usa&name=spain">Multiple: USA, Spain</a>
-                
-                <!-- <label>Params</label> -->
-                <!-- <input id="params" name="params" placeholder="sweden, brazil, usa" value=""></input> -->
-
-                <!-- submit -->
-                <!-- <button id="submit" type="submit">Send</button> -->
-            </form>
-        </div>
-    <% } else { %>
-    <% } %>
+    
+    <div id="sectionAbout">
+        <h3 id="Title">About</h3>
+        <p>This is a student project, made to learn about REST APIs.</p>
+    
+        <h3 id="privacyPolicyTitle">Privacy Policy</h3>
+        <p class="privacyPolicyItem">Collects Account Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Personal Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Device Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Metrics Data: <span class="yes">Yes</span></p>
+        <p class="privacyPolicyItem">Collects Diagnostics Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Location Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Financial Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Messages Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Collects Media Data: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Uses Cookies: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Uses Local Storage: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Links to Other Websites: <span class="no">No</span></p>
+        <p class="privacyPolicyItem">Policy Might Change in the Future: <span class="yes">Yes</span></p>
+    </div>
 </body>
 </html>
 
@@ -105,11 +147,19 @@
         font-family: Arial, Helvetica, sans-serif;
         border: 1px solid white;
         box-shadow: 2px 1px black;
-        overflow-y: hidden;
+        overflow-y: scroll;
         color: white;
         background-color: black;
     }
-    input { display: block; width: calc(96% + 1px); padding: 11px; font-size: 16px; font-weight: bold; border: 1px solid white; }
+    input 
+    { 
+        display: block; width: calc(96% + 1px); 
+        margin: 0px 0px 1px 0px; 
+        padding: 11px; 
+        font-size: 16px; 
+        font-weight: bold; 
+        border: 1px solid white; 
+    }
     button 
     { 
         height: 42px;
@@ -130,8 +180,12 @@
     form { width: 100%; }
     select { width: 100%; }
     label { display: block; margin: 10px 0px 0px 0px; }
-    a 
-    { 
+    a { margin: 0px; padding: 0px; text-decoration: none; color: white; }
+    
+    /*** classes ***/
+    .dot { display: block; padding: 3px 6px 0px 6px; opacity: 0.3; }
+    .tryRequestLink 
+    {
         display: block; 
         margin: 0px 0px 1px 0px;
         padding: 12px 11px 12px 11px; 
@@ -141,7 +195,9 @@
         color: black; 
         background-color: white; 
     }
-
+    .yes { color: lightgreen; }
+    .no { color: red; }
+    
     /*** ids ***/
     #supportedEndpointsTitle { margin: 0px 0px 0px 0px; user-select: none; font-size: 20px; }
     #supportedCountriesTitle { margin: 30px 0px 0px 0px; user-select: none; font-size: 20px; }
@@ -150,8 +206,35 @@
     #title { margin: 0px 0px 20px 0px; text-align: center; user-select: none; }
     #submit { margin: 0px; }
     #token2 { display: none; }
-    #generateToken { margin: 30px 0px 0px 0px; }    
-
+    #generateToken { margin: 30px 0px 0px 0px; }
+    #navMenu 
+    { 
+        display: flex; 
+        width: 100%; 
+        margin: 0px 0px 20px 0px; 
+        font-weight: bold;
+        flex-direction: row; 
+        justify-content: center;
+        user-select: none;
+    }
+    #navMenuHome { opacity: 1; }
+    #navMenuAbout { opacity: 0.3; }
+    #privacyPolicyTitle { margin: 30px 0px 0px 0px; font-size: 20px; }
+    #Title { margin: 0px; font-size: 20px; }
+    #sectionAbout 
+    { 
+        position: relative; 
+        display: none; 
+        top: 0px; 
+        margin: auto;
+        margin-left: -30px;
+        padding: 0px 30px 30px 30px;
+        height: auto; 
+        width: auto; 
+        background-color: black; 
+    }
+    #sectionHome { display: block; }
+    
     /*** mobile ***/
     @media screen and (max-width: 1000px) {
         body { width: auto; margin: 0px; box-shadow: 0px 0px black; border: 0px solid black; }
