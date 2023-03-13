@@ -2,7 +2,7 @@
 
 {
 	"name":"Countries REST API",
-	"short_name":"REST API",
+	"short_name":"CRA",
 	"start_url":"/",
 	"display":"standalone",
 	"background_color":"#000000",
