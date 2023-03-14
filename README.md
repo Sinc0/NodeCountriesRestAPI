@@ -2,7 +2,7 @@
 - Description: Fetch data about countries
 - Type: REST API
 - LoC: ~440
-- [Logo]()
+- [Logo](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/public/icon.png)
 
 ### Technologies
 - [NodeJS](https://www.nodejs.org)
