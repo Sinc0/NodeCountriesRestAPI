@@ -2,7 +2,7 @@
 - Description: Fetch data about countries
 - Type: REST API
 - LoC: ~440
-- [Logo]()
+- [Logo](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/public/icon.png)
 
 ### Technologies
 - [NodeJS](https://www.nodejs.org)
@@ -25,6 +25,6 @@
 - [Track Token Usage](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L48-L49)
 
 ### Releases
-- [Web](https://node-countries-api.herokuapp.com/)
+- [Web](https://node-cra.herokuapp.com/)
 - [Desktop]()
 - [Mobile]()
