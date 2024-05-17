@@ -1,8 +1,10 @@
 //imports
 const token = require('./models/tokenSchema')
 
-//exports
+
+//validate token
 module.exports = async(req, res, next) => {
+    
     //debugging
     // console.log(req.ip)
     // console.log(req.headers)
@@ -15,22 +17,19 @@ module.exports = async(req, res, next) => {
     let tokenIsValid = 1
     // let tkn = req.headers.token || req.body.token
 
-    //check if token exists
+    //check token exists
     let checkToken = await token.find({id: tkn})
     
-    //check if token is valid
-    if(checkToken.length == tokenIsValid) 
-    { 
-        next() 
-    }
+    //token is valid
+    if(checkToken.length == tokenIsValid) { next() }
+
+    //token is NOT valid
     else 
     { 
         //log
         console.log("(Unknown User) " + req.ip + " requests " + "/country")
 
         //send response
-        res.json({ error: 'token is invalid' }) 
+        res.json({ error: 'token is invalid' })
     }
 }
-
-

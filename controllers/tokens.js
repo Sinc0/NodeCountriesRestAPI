@@ -2,8 +2,10 @@
 const { v4: uuidv4 } = require('uuid')
 const token = require('../models/tokenSchema.js')
 
+
 //exports
 exports.create = async(req, res, next) => {
+
     //log
     console.log(req.ip + " requests " + "/token")
 
@@ -15,7 +17,7 @@ exports.create = async(req, res, next) => {
     //set token
     let newToken = new token({ ip: clientIp, id: uuid, createdAt: date })
     
-    //update db
+    //update DB create token
     newToken.save()
 
     //send response

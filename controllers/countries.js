@@ -2,28 +2,28 @@
 const country = require('../models/countrySchema.js')
 const mongoose = require('mongoose')
 
+
 //variables
 const dbTokens = mongoose.connection.collection('tokens')
 
-//exports
+
+//fetch all countries
 exports.all = async(req, res, next) => {
+    
     //log
     console.log(req.ip + " requests " + "/all")
     
     //debugging
-    console.log(req.query)
+    // console.log(req.query)
     
     //variables
     let tkn = req.query.token
+    let data = await country.find() //get all countries data
     
-    //get all countries data
-    let data = await country.find()
-    
-    if(data.length == 0) //error check
-    {
-        //send response
-        res.status(404).json({ error: '404 countries not found' }) 
-    }
+    //null check
+    if(data.length == 0) { res.status(404).json({ error: '404 countries not found' }) }
+
+    //handle data
     else 
     {
         //clean country obj
@@ -40,33 +40,32 @@ exports.all = async(req, res, next) => {
         }
         
         //send response
-        res.status(201).json({
-            type: 'all',
-            countries: data
-        })
+        res.status(201).json({ type: 'all', countries: data })
     
-        //increment endpoint usage counter
+        //update DB usage counter
         await dbTokens.updateOne({id: tkn}, {$inc: {"/all": 1}})
     }
 }
 
+
+//fetch specific country
 exports.specific = async(req, res, next) => {
+
     //log
     console.log(req.ip + " requests " + "/specific")
 
     //debugging
-    console.log(req.query)
+    // console.log(req.query)
     
     //variables
     let countryIsArray = Array.isArray(req.query.name)
     let specificCountry = req.query.name
     let tkn = req.query.token
     
-    if(specificCountry == null)
-    {
-        //send response
-        res.status(404).json({ error: 'country not specified' }) 
-    }
+    //null check
+    if(specificCountry == null) { res.status(404).json({ error: 'country not specified' }) }
+
+    //handle data
     else if(countryIsArray == false)
     {
         //lowercase handling
@@ -79,14 +78,12 @@ exports.specific = async(req, res, next) => {
         //get country data
         let data = await country.find({name: specificCountry})
     
-        if(data.length == 0) //error check
-        { 
-            //send response
-            res.status(404).json({ error: '404 country not found' }) 
-        }
+        //null check
+        if(data.length == 0) { res.status(404).json({ error: '404 country not found' }) }
+
+        //send response
         else
         {
-            //send response
             res.status(201).json({ 
                 type: 'specific', 
                 country: { 
@@ -98,10 +95,12 @@ exports.specific = async(req, res, next) => {
                 }
             })
 
-            //increment endpoint usage counter
+            //update DB usage counter
             await dbTokens.updateOne({id: tkn}, {$inc: {"/specific": 1}})
         }
     }
+
+    //error
     else
     {
         //send response
@@ -109,19 +108,23 @@ exports.specific = async(req, res, next) => {
     }
 }
 
+
+//fetch multiple countries
 exports.multiple = async(req, res, next) => {
+
     //log
     console.log(req.ip + " requests " + "/multiple")
 
     //debugging
-    console.log(req.query)
+    // console.log(req.query)
     
     //variables
     let countryIsArray = Array.isArray(req.query.name)
     let countriesArray = []
     let countries = req.query.name
     let tkn = req.query.token
-
+    
+    //multiple countries is specified
     if(countryIsArray == true)
     {
         for(let c in countries)
@@ -151,23 +154,23 @@ exports.multiple = async(req, res, next) => {
             }
         }
 
-        if(countriesArray.length == 0) //error check
-        { 
-            //send response
-            res.status(404).json({ error: '404 countries not found' }) 
-        }
+        //null check
+        if(countriesArray.length == 0) { res.status(404).json({ error: '404 countries not found' }) }
+
+        //handle data
         else
         {
             //send response
             res.status(201).json({type: 'multiple', countries: countriesArray })
 
-            //increment endpoint usage counter
+            //update DB usage counter
             await dbTokens.updateOne({id: tkn}, {$inc: {"/multiple": 1}})
         }
     }
+
+    //single country is specified
     else
-    {
-        //send response
-        res.status(404).json({ error: 'this endpoint does not support a single country' })
+    { 
+        res.status(404).json({ error: 'this endpoint does not support a single country' }) 
     }
 }

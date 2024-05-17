@@ -1,6 +1,14 @@
-fetch data /all?token={token}
-fetch data /specific?token={token}&name=usa
-fetch data /multiple?token={token}&name=usa&name=spain
-create token
-mobile styling
-about page
+fetch:
+· all countries: /all?token={token}
+· specific country: /specific?token={token}&name=usa
+· multiple countries: /multiple?token={token}&name=usa&name=spain
+
+token:
+· create
+· validate
+· track usage
+
+views:
+· home page
+· about page
+· mobile styling

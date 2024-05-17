@@ -12,16 +12,20 @@
     <title>Countries REST API</title>
 </head>
 
+
 <script>
+    //functions
     function changeFormAction(value)
     {
         document.getElementById("formExampleRequest").action = "/" + value
     }
 
+
     function generateToken()
     {
         document.getElementById("formGenerateToken").submit()
     }
+
 
     function selectSection(selectedSection)
     {
@@ -51,6 +55,7 @@
             sectionAbout.style.display = "block"
         } 
     }
+
 
     function submitGenerateTokenForm(event) 
     {
@@ -93,6 +98,7 @@
         event.preventDefault()
     }
 
+
     function attachFormSubmitEvent()
     {
         //elements
@@ -101,6 +107,7 @@
         //set event listener
         formGenerateToken.addEventListener("submit", submitGenerateTokenForm)
     }
+
 
     function refreshTokenLinks()
     {
@@ -246,6 +253,7 @@
     label { display: block; margin: 10px 0px 0px 0px; }
     a { margin: 0px; padding: 0px; text-decoration: none; font-family: Arial, Helvetica, sans-serif; color: white; }
     
+
     /*** classes ***/
     .dot { display: block; padding: 2px 7px 0px 7px; opacity: 0.3; }
     .tryRequestLink 
@@ -263,6 +271,7 @@
     .yes { color: lightgreen; }
     .no { color: red; }
     
+
     /*** ids ***/
     #supportedRoutesTitle { margin: 30px 0px 0px 0px; user-select: none; font-size: 20px; }
     #supportedCountriesTitle { margin: 0px; user-select: none; font-size: 20px; }
@@ -318,6 +327,7 @@
     }
     #token1 { display: none; }
     #exampleRequest { display: none; }
+    
     
     /*** mobile ***/
     @media screen and (max-width: 1000px) {
