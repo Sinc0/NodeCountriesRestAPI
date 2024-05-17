@@ -1,7 +1,7 @@
 ### Summary
 - Name: Countries REST API
 - Description: Fetch data about countries
-- LoC: ~440
+- LoC: ~670
 - [Logo](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/public/icon.png)
 ###
 - Features:
