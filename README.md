@@ -3,6 +3,7 @@
 - Description: Fetch data about countries
 - LoC: ~440
 - [Logo](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/public/icon.png)
+###
 - Features:
 - \--- Fetch All Countries
 - \--- Fetch Specific Country
@@ -11,10 +12,10 @@
 - \--- Token Usage Tracking
 
 ### Technologies
-- [NodeJS](https://www.nodejs.org)
-- [ExpressJS](https://www.npmjs.com/package/express)
-- [EJS](https://www.npmjs.com/package/ejs)
-- [Mongoose](https://www.npmjs.com/package/mongoose)
+- [Node](https://www.nodejs.org)
+- [Express](https://expressjs.com)
+- [EJS](https://ejs.co)
+- [Mongoose](https://mongoosejs.com)
 
 ### Code
 - [Routes](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/routes.js)
