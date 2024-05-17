@@ -25,10 +25,10 @@
 - [File - Countries](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js)
 - [File - Tokens](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/tokens.js)
 ###
-- [Fetch - All Countries](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L9-L51)
-- [Fetch - Specific Country](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L53-L110)
-- [Fetch - Multiple Countries](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L112-L172)
+- [Fetch - All Countries](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L11-L48)
+- [Fetch - Specific Country](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L52-L109)
+- [Fetch - Multiple Countries](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L113-L176)
 ###
-- [Token - Create](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/tokens.js#L6-L23)
-- [Token - Validate](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/validation.js#L5-L34)
-- [Token - Track Usage](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L48-L49)
+- [Token - Create](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/tokens.js#L7-L25)
+- [Token - Validate](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/validation.js#L6-L35)
+- [Token - Track Usage](https://github.com/Sinc0/NodeCountriesRestAPI/blob/master/controllers/countries.js#L45-L46)
